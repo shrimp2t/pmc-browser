@@ -549,17 +549,6 @@ SadTabView::SadTabView(content::WebContents* web_contents, SadTabKind kind)
   auto* actions_container =
       container->AddChildView(std::make_unique<views::FlexLayoutView>());
   actions_container->SetCrossAxisAlignment(views::LayoutAlignment::kCenter);
-  // Do not show the help link in the kiosk session to prevent escape from a
-  // kiosk app.
-  if (!profiles::IsKioskSession()) {
-    auto* help_link =
-        actions_container->AddChildView(std::make_unique<views::Link>(
-            l10n_util::GetStringUTF16(GetHelpLinkTitle())));
-    help_link->SetCallback(base::BindRepeating(
-        &SadTab::PerformAction, base::Unretained(this), Action::HELP_LINK));
-    help_link->SetProperty(views::kTableVertAlignKey,
-                           views::LayoutAlignment::kCenter);
-  }
   action_button_ =
       actions_container->AddChildView(std::make_unique<views::MdTextButton>(
           base::BindRepeating(&SadTabView::PerformAction,

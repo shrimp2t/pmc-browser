@@ -74,11 +74,7 @@ public abstract class ChromeFeatureList {
      *   the specified parameter does not exist.
      */
     public static String getFieldTrialParamByFeature(String featureName, String paramName) {
-        String testValue = FeatureList.getTestValueForFieldTrialParam(featureName, paramName);
-        if (testValue != null) return testValue;
-        if (FeatureList.hasTestFeatures()) return "";
-        assert FeatureList.isInitialized();
-        return ChromeFeatureListJni.get().getFieldTrialParamByFeature(featureName, paramName);
+        return "";
     }
 
     /**
@@ -95,12 +91,7 @@ public abstract class ChromeFeatureList {
      */
     public static int getFieldTrialParamByFeatureAsInt(
             String featureName, String paramName, int defaultValue) {
-        String testValue = FeatureList.getTestValueForFieldTrialParam(featureName, paramName);
-        if (testValue != null) return Integer.valueOf(testValue);
-        if (FeatureList.hasTestFeatures()) return defaultValue;
-        assert FeatureList.isInitialized();
-        return ChromeFeatureListJni.get().getFieldTrialParamByFeatureAsInt(
-                featureName, paramName, defaultValue);
+        return defaultValue;
     }
 
     /**
@@ -117,12 +108,7 @@ public abstract class ChromeFeatureList {
      */
     public static double getFieldTrialParamByFeatureAsDouble(
             String featureName, String paramName, double defaultValue) {
-        String testValue = FeatureList.getTestValueForFieldTrialParam(featureName, paramName);
-        if (testValue != null) return Double.valueOf(testValue);
-        if (FeatureList.hasTestFeatures()) return defaultValue;
-        assert FeatureList.isInitialized();
-        return ChromeFeatureListJni.get().getFieldTrialParamByFeatureAsDouble(
-                featureName, paramName, defaultValue);
+        return defaultValue;
     }
 
     /**
@@ -153,12 +139,7 @@ public abstract class ChromeFeatureList {
      */
     public static boolean getFieldTrialParamByFeatureAsBoolean(
             String featureName, String paramName, boolean defaultValue) {
-        String testValue = FeatureList.getTestValueForFieldTrialParam(featureName, paramName);
-        if (testValue != null) return Boolean.valueOf(testValue);
-        if (FeatureList.hasTestFeatures()) return defaultValue;
-        assert FeatureList.isInitialized();
-        return ChromeFeatureListJni.get().getFieldTrialParamByFeatureAsBoolean(
-                featureName, paramName, defaultValue);
+        return defaultValue;
     }
 
     /* Alphabetical: */

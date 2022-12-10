@@ -149,7 +149,7 @@ bool IsChromeControlledNtpUrl(const GURL& url) {
 
 StartupTabs StartupTabProviderImpl::GetOnboardingTabs(Profile* profile) const {
 // Chrome OS has its own welcome flow provided by OOBE.
-#if BUILDFLAG(IS_CHROMEOS_ASH)
+#if 1
   return StartupTabs();
 #else
   if (!profile)

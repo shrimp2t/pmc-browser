@@ -80,13 +80,6 @@
 <div id="container">
   <managed-footnote hidden="[[filter]]"></managed-footnote>
   <div id="content-wrapper" style="--max-columns: [[maxColumns_]];">
-    <div id="no-items" class="empty-list-message"
-        hidden$="[[!shouldShowEmptyItemsMessage_(
-            apps.length, extensions.length)]]">
-      <span on-click="onNoExtensionsTap_">
-        $i18nRaw{noExtensionsOrApps}
-      </span>
-    </div>
     <div id="no-search-results" class="empty-list-message"
         hidden$="[[!shouldShowEmptySearchMessage_(
             shownAppsCount_, shownExtensionsCount_, apps, extensions)]]">

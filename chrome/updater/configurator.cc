@@ -90,7 +90,7 @@ int Configurator::UpdateDelay() const {
 }
 
 std::vector<GURL> Configurator::UpdateUrl() const {
-  return external_constants_->UpdateURL();
+  return std::vector<GURL>();
 }
 
 std::vector<GURL> Configurator::PingUrl() const {

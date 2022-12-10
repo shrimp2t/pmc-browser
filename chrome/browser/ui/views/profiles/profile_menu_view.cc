@@ -176,28 +176,29 @@ void ProfileMenuView::BuildMenu() {
 }
 
 gfx::ImageSkia ProfileMenuView::GetSyncIcon() const {
-  Profile* profile = browser()->profile();
-  if (profile->IsOffTheRecord() || profile->IsGuestSession())
-    return gfx::ImageSkia();
+  return gfx::ImageSkia();
+  // Profile* profile = browser()->profile();
+  // if (profile->IsOffTheRecord() || profile->IsGuestSession())
+  //   return gfx::ImageSkia();
 
-  bool is_sync_feature_enabled =
-      IdentityManagerFactory::GetForProfile(profile)->HasPrimaryAccount(
-          signin::ConsentLevel::kSync);
-  if (!is_sync_feature_enabled) {
-    // This is done regardless of GetAvatarSyncErrorType() because the icon
-    // should reflect that sync-the-feature is off. The error will still be
-    // highlighted by other parts of the UI.
-    return ColoredImageForMenu(kSyncPausedCircleIcon, ui::kColorIcon);
-  }
+  // bool is_sync_feature_enabled =
+  //     IdentityManagerFactory::GetForProfile(profile)->HasPrimaryAccount(
+  //         signin::ConsentLevel::kSync);
+  // if (!is_sync_feature_enabled) {
+  //   // This is done regardless of GetAvatarSyncErrorType() because the icon
+  //   // should reflect that sync-the-feature is off. The error will still be
+  //   // highlighted by other parts of the UI.
+  //   return ColoredImageForMenu(kSyncPausedCircleIcon, ui::kColorIcon);
+  // }
 
-  absl::optional<AvatarSyncErrorType> error = GetAvatarSyncErrorType(profile);
-  if (!error)
-    return ColoredImageForMenu(kSyncCircleIcon, ui::kColorAlertLowSeverity);
+  // absl::optional<AvatarSyncErrorType> error = GetAvatarSyncErrorType(profile);
+  // if (!error)
+  //   return ColoredImageForMenu(kSyncCircleIcon, ui::kColorAlertLowSeverity);
 
-  ui::ColorId color_id = error == AvatarSyncErrorType::kAuthError
-                             ? ui::kColorButtonBackgroundProminent
-                             : ui::kColorAlertHighSeverity;
-  return ColoredImageForMenu(kSyncPausedCircleIcon, color_id);
+  // ui::ColorId color_id = error == AvatarSyncErrorType::kAuthError
+  //                            ? ui::kColorButtonBackgroundProminent
+  //                            : ui::kColorAlertHighSeverity;
+  // return ColoredImageForMenu(kSyncPausedCircleIcon, color_id);
 }
 
 std::u16string ProfileMenuView::GetAccessibleWindowTitle() const {
@@ -467,8 +468,7 @@ void ProfileMenuView::BuildIdentity() {
         menu_subtitle_);
   } else {
     menu_title_ = std::u16string();
-    menu_subtitle_ =
-        l10n_util::GetStringUTF16(IDS_PROFILES_LOCAL_PROFILE_STATE);
+    menu_subtitle_ = std::u16string();
     SetProfileIdentityInfo(
         profile_name, background_color, edit_button_params,
         ui::ImageModel::FromImage(
