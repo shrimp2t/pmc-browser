@@ -16,7 +16,8 @@
 
 /* Common styles and definitions. */
 
-@import "chrome://resources/css/roboto.css";
+@import "//fonts.googleapis.com/css?family=Open+Sans:300,400,700&subset=latin,cyrillic-ext,greek-ext,cyrillic,greek,vietnamese,latin-ext";
+@import "//fonts.googleapis.com/css?family=Source+Code+Pro";
 *,
 *::after,
 *::before {
@@ -71,7 +72,7 @@ ul, ol {
   user-select: none;
 }
 .u-monospace {
-  font-family: monospace;
+  font-family: 'Source Code Pro', monospace;
 }
 
 /* Common.soy */
@@ -81,7 +82,7 @@ ul, ol {
   color: #000;
   display: -ms-flexbox;
   display: flex;
-  font: 14px/1.54 'Roboto', sans-serif;
+  font: 14px/1.54 'Open Sans', sans-serif;
   min-height: 100vh;
   -ms-flex-direction: column;
   flex-direction: column;

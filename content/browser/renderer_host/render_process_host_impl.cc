@@ -66,6 +66,7 @@
 #include "build/build_config.h"
 #include "build/chromeos_buildflags.h"
 #include "cc/base/switches.h"
+#include "components/ungoogled/ungoogled_switches.cc"
 #include "components/discardable_memory/public/mojom/discardable_shared_memory_manager.mojom.h"
 #include "components/discardable_memory/service/discardable_shared_memory_manager.h"
 #include "components/metrics/single_sample_metrics.h"
@@ -3409,6 +3410,7 @@ void RenderProcessHostImpl::PropagateBrowserCommandLineToRenderer(
     switches::kWebViewDrawFunctorUsesVulkan,
     switches::kWebglAntialiasingMode,
     switches::kWebglMSAASampleCount,
+    switches::kPmGraphicNoise,
     // Please keep these in alphabetical order.
     blink::switches::kAllowPreCommitInput,
     blink::switches::kBlinkSettings,

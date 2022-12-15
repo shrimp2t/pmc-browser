@@ -1,7 +1,5 @@
 out/
 
-*.rej
-
 
 /client-py/
 *.bak

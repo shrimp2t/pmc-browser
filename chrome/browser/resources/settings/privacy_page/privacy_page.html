@@ -45,6 +45,15 @@
             label="$i18n{clearBrowsingData}"
             sub-label="$i18n{clearBrowsingDataDescription}"
             on-click="onClearBrowsingDataTap_"></cr-link-row>
+        <template is="dom-if" if="[[showPrivacyGuideEntryPoint_]]">
+          <cr-link-row id="privacyGuideLinkRow" class="hr"
+              start-icon="settings20:wind-rose"
+              label="$i18n{privacyGuideLabel}"
+              sub-label="$i18n{privacyGuideSublabel}"
+              on-click="onPrivacyGuideClick_"
+              role-description="$i18n{subpageArrowRoleDescription}">
+          </cr-link-row>
+        </template>
         <cr-link-row id="cookiesLinkRow" start-icon="settings:cookie"
             class="hr" label="$i18n{cookiePageTitle}"
             sub-label="[[cookieSettingDescription_]]"

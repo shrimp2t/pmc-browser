@@ -22,7 +22,7 @@
               external$="[[captionSettingsOpensExternally_]]">
           </cr-link-row>
         </template>
-        <template is="dom-if" if="[[false]]">
+        <template is="dom-if" if="[[!captionSettingsOpensExternally_]]">
           <cr-link-row id="captions"
               class="hr"
               label="$i18n{captionsTitle}"

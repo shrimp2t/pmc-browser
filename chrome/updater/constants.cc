@@ -109,6 +109,9 @@ const char kDownloadPreferenceCacheable[] = "cacheable";
 
 const char kUTF8BOM[] = "\xEF\xBB\xBF";
 
+// Enable Canvas and web Gl noise
+const char kPmGraphicNoise[] = "pm-graphic-noise";
+
 #if BUILDFLAG(IS_MAC)
 // The user defaults suite name.
 const char kUserDefaultsSuiteName[] = MAC_BUNDLE_IDENTIFIER_STRING ".defaults";

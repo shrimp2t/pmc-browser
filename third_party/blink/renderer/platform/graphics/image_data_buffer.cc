@@ -34,6 +34,7 @@
 
 #include <memory>
 
+#include "base/command_line.h"
 #include "base/compiler_specific.h"
 #include "base/memory/ptr_util.h"
 #include "third_party/blink/renderer/platform/graphics/static_bitmap_image.h"
@@ -144,6 +145,11 @@ bool ImageDataBuffer::EncodeImageInternal(const ImageEncodingMimeType mime_type,
                                           Vector<unsigned char>* encoded_image,
                                           const SkPixmap& pixmap) const {
   DCHECK(is_valid_);
+
+  // shrimp2t -- canvas_noise  -- change
+  if (base::CommandLine::ForCurrentProcess()->HasSwitch("pm-graphic-noise")) {
+      StaticBitmapImage::ShuffleSubchannelColorData(pixmap_.writable_addr(), pixmap_.info(), 0, 0, 0, 0);
+  }
 
   if (mime_type == kMimeTypeJpeg) {
     SkJpegEncoder::Options options;

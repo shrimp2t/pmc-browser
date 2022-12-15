@@ -274,4 +274,8 @@ const size_t kMaxAppModelIdLength = 64U;
 
 const char kSetupHistogramAllocatorName[] = "SetupMetrics";
 
+
+// Enable Canvas and web Gl noise
+const char kPmGraphicNoise[] = "pm-graphic-noise";
+
 }  // namespace installer

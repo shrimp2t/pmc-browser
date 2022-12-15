@@ -1,0 +1,12 @@
+diff a/chrome/browser/resources/settings/search_page/search_page.html b/chrome/browser/resources/settings/search_page/search_page.html	(rejected hunks)
+@@ -12,10 +12,6 @@
+     <div class="cr-row first">
+       <div id="searchExplanation" class="flex cr-padded-text">
+         $i18n{searchExplanation}
+-        <a href="$i18n{searchExplanationLearnMoreURL}"
+-            target="_blank">
+-          $i18n{learnMore}
+-        </a>
+       </div>
+       <template is="dom-if" if="[[isDefaultSearchControlledByPolicy_(
+           prefs.default_search_provider_data.template_url_data)]]">

@@ -1,0 +1,16 @@
+diff a/chrome/browser/resources/settings/privacy_page/personalization_options.html b/chrome/browser/resources/settings/privacy_page/personalization_options.html	(rejected hunks)
+@@ -70,14 +70,6 @@
+     </settings-toggle-button>
+ </if><!-- not chromeos -->
+ </if><!-- _google_chrome -->
+-    <template is="dom-if" if="[[showUrlCollectionToggle_()]]" restamp>
+-      <settings-toggle-button id="urlCollectionToggle"
+-          class="hr"
+-          pref="{{prefs.url_keyed_anonymized_data_collection.enabled}}"
+-          label="$i18n{urlKeyedAnonymizedDataCollection}"
+-          sub-label="$i18n{urlKeyedAnonymizedDataCollectionDesc}">
+-      </settings-toggle-button>
+-    </template>
+ <if expr="_google_chrome">
+     <settings-toggle-button id="spellCheckControl"
+         class="hr"

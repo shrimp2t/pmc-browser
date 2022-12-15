@@ -4082,6 +4082,12 @@ bool WebGLImageConversion::PackPixels(
   return true;
 }
 
+WebGLImageConversion::DataFormat
+  WebGLImageConversion::GetWebGLDataFormat(GLenum destination_format,
+                                      GLenum destination_type) {
+  return GetDataFormat(destination_format, destination_type);
+}
+
 void WebGLImageConversion::UnpackPixels(const uint16_t* source_data,
                                         DataFormat source_data_format,
                                         unsigned pixels_per_row,

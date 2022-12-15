@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "base/command_line.h"
 #include "third_party/blink/renderer/platform/graphics/static_bitmap_image.h"
 
 #include "base/numerics/checked_math.h"
@@ -114,5 +115,211 @@ void StaticBitmapImage::DrawHelper(cc::PaintCanvas* canvas,
       &flags,
       WebCoreClampingModeToSkiaRectConstraint(draw_options.clamping_mode));
 }
+
+
+// set the component to maximum-delta if it is >= maximum, or add to existing color component (color + delta)
+#define shuffleComponent(color, max, delta) ( (color) >= (max) ? ((max)-(delta)) : ((color)+(delta)) )
+
+#define writable_addr(T, p, stride, x, y) (T*)((const char *)p + y * stride + x * sizeof(T))
+
+
+// shrimp2t: canvas_noise
+void StaticBitmapImage::ShuffleSubchannelColorData(const void *addr, const SkImageInfo& info, int srcX, int srcY, int sw, int sh) {
+  auto w = info.width() - srcX, h = info.height() - srcY;
+
+  // skip tiny images; info.width()/height() can also be 0
+
+ 
+  // if ((w < 8) || (h < 8)) {
+  //   LOG(INFO) << "Do_NOTHING__SKIP__0" ;
+  //   return;
+  // }
+
+  // if ( srcX > 0 && srcY > 0  && (srcX < 8 || srcY < 8)) {
+  //   LOG(INFO) << "Do_NOTHING__SKIP__1 src=" << srcX << " srcY=" << srcY;
+  //   return;
+  // }
+
+  if ( ! base::CommandLine::ForCurrentProcess()->HasSwitch("pm-graphic-noise") ) {
+    LOG(INFO) << "Do_NOTHING__SKIP" ;
+    return;
+  }
+
+
+  LOG(INFO) << "Data: ShuffleSubchannelColorData srcX=" << srcX << " srcY=" << srcY <<" sw=" << sh << " sh=" << sh <<" IMG_W=" << w << " IMG_H=" << h  <<" infoW=" << info.width() << " infoH=" << info.height();
+
+  if ( sw > 0 && sh > 0 && ( sw - srcX  < 9 ||  sh - srcY < 9 )) {
+    LOG(INFO) << "SKIP___ShuffleSubchannelColorData ";
+    return;
+  }
+
+
+  // shrimp2t: canvas_noise
+  std::string notice_str = base::CommandLine::ForCurrentProcess()->GetSwitchValueASCII("pm-graphic-noise");
+  String str_config = String::FromUTF8(notice_str);
+
+  Vector<double> c_noises;
+  Vector<String> vec_tpl;
+  str_config.Split( ",", vec_tpl) ;
+  for( String i : vec_tpl ){
+    c_noises.push_back(i.ToDouble());
+  }
+
+  int noises_size = c_noises.size();
+  double shuffleX = noises_size > 0 ? c_noises.at(0) : 0;
+	double shuffleY = noises_size > 1 ? c_noises.at(1) : 0;
+	uint8_t shuffleR = noises_size > 2 ? c_noises.at(2) : 1;
+	uint8_t shuffleG = noises_size > 3 ? c_noises.at(3) : 0;
+	uint8_t shuffleB = noises_size > 4 ? c_noises.at(4) : 0;
+	int nPx = noises_size > 5 ? c_noises.at(5) : 0;
+
+  shuffleX = shuffleX >= 1 ? 0.1 : shuffleX;
+  shuffleX = shuffleY >= 1 ? 0.1 : shuffleY;
+
+  // generate the first random number here
+  //double shuffleX = base::RandDouble();
+  // second random number (for y/height)
+  //double shuffleY = base::RandDouble();
+
+  // cap maximum pixels to change
+  // auto pixels = (w + h) / 128;
+  auto pixels = 10;
+
+  if ( nPx > 0 ) {
+    pixels = nPx;
+  }
+
+  if (pixels > 10) {
+    pixels = 10;
+  } else if (pixels < 2) {
+    pixels = 2;
+  }
+
+  auto colorType = info.colorType();
+  auto fRowBytes = info.minRowBytes(); // stride
+
+  LOG(INFO) << "BRM: ShuffleSubchannelColorData() w=" << w << " h=" << h << " colorType=" << colorType << " fRowBytes=" << fRowBytes << "RandomD=" << base::RandDouble();
+
+  LOG(INFO) << "shuffleX=" << shuffleX << " shuffleY=" << shuffleY << " shuffleR=" << shuffleR << " shuffleG=" << shuffleG << " shuffleB=" << shuffleB << " nPx=" << nPx;
+
+  
+
+  // calculate random coordinates using bisection
+  auto currentW = w, currentH = h;
+  for(;pixels >= 0; pixels--) {
+    int x = currentW * shuffleX, y = currentH * shuffleY;
+
+    // calculate randomisation amounts for each RGB component
+    // uint8_t shuffleR = base::RandInt(0, 4);
+    // uint8_t shuffleG = (shuffleR + x) % 4;
+    // uint8_t shuffleB = (shuffleG + y) % 4;
+
+    // manipulate pixel data to slightly change the R, G, B components
+    switch (colorType) {
+      case kAlpha_8_SkColorType:
+      {
+         auto *pixel = writable_addr(uint8_t, addr, fRowBytes, x, y);
+         auto r = SkColorGetR(*pixel), g = SkColorGetG(*pixel), b = SkColorGetB(*pixel), a = SkColorGetA(*pixel);
+
+         r = shuffleComponent(r, UINT8_MAX-1, shuffleR);
+         g = shuffleComponent(g, UINT8_MAX-1, shuffleG);
+         b = shuffleComponent(b, UINT8_MAX-1, shuffleB);
+         // alpha is left unchanged
+
+         *pixel = SkColorSetARGB(a, r, g, b);
+      }
+      break;
+      case kGray_8_SkColorType:
+      {
+         auto *pixel = writable_addr(uint8_t, addr, fRowBytes, x, y);
+         *pixel = shuffleComponent(*pixel, UINT8_MAX-1, shuffleB);
+      }
+      break;
+      case kRGB_565_SkColorType:
+      {
+         auto *pixel = writable_addr(uint16_t, addr, fRowBytes, x, y);
+         unsigned    r = SkPacked16ToR32(*pixel);
+         unsigned    g = SkPacked16ToG32(*pixel);
+         unsigned    b = SkPacked16ToB32(*pixel);
+
+         r = shuffleComponent(r, 31, shuffleR);
+         g = shuffleComponent(g, 63, shuffleG);
+         b = shuffleComponent(b, 31, shuffleB);
+
+         unsigned r16 = (r & SK_R16_MASK) << SK_R16_SHIFT;
+         unsigned g16 = (g & SK_G16_MASK) << SK_G16_SHIFT;
+         unsigned b16 = (b & SK_B16_MASK) << SK_B16_SHIFT;
+
+         *pixel = r16 | g16 | b16;
+      }
+      break;
+      case kARGB_4444_SkColorType:
+      {
+         auto *pixel = writable_addr(uint16_t, addr, fRowBytes, x, y);
+         auto a = SkGetPackedA4444(*pixel), r = SkGetPackedR4444(*pixel), g = SkGetPackedG4444(*pixel), b = SkGetPackedB4444(*pixel);
+
+         r = shuffleComponent(r, 15, shuffleR);
+         g = shuffleComponent(g, 15, shuffleG);
+         b = shuffleComponent(b, 15, shuffleB);
+         // alpha is left unchanged
+
+         unsigned a4 = (a & 0xF) << SK_A4444_SHIFT;
+         unsigned r4 = (r & 0xF) << SK_R4444_SHIFT;
+         unsigned g4 = (g & 0xF) << SK_G4444_SHIFT;
+         unsigned b4 = (b & 0xF) << SK_B4444_SHIFT;
+
+         *pixel = r4 | b4 | g4 | a4;
+      }
+      break;
+      case kRGBA_8888_SkColorType:
+      {
+         auto *pixel = writable_addr(uint32_t, addr, fRowBytes, x, y);
+         auto a = SkGetPackedA32(*pixel), r = SkGetPackedR32(*pixel), g = SkGetPackedG32(*pixel), b = SkGetPackedB32(*pixel);
+
+         r = shuffleComponent(r, UINT8_MAX-1, shuffleR);
+         g = shuffleComponent(g, UINT8_MAX-1, shuffleG);
+         b = shuffleComponent(b, UINT8_MAX-1, shuffleB);
+         // alpha is left unchanged
+
+         *pixel = (a << SK_A32_SHIFT) | (r << SK_R32_SHIFT) |
+                  (g << SK_G32_SHIFT) | (b << SK_B32_SHIFT);
+      }
+      break;
+      case kBGRA_8888_SkColorType:
+      {
+         auto *pixel = writable_addr(uint32_t, addr, fRowBytes, x, y);
+         auto a = SkGetPackedA32(*pixel), b = SkGetPackedR32(*pixel), g = SkGetPackedG32(*pixel), r = SkGetPackedB32(*pixel);
+
+         r = shuffleComponent(r, UINT8_MAX-1, shuffleR);
+         g = shuffleComponent(g, UINT8_MAX-1, shuffleG);
+         b = shuffleComponent(b, UINT8_MAX-1, shuffleB);
+         // alpha is left unchanged
+
+         *pixel = (a << SK_BGRA_A32_SHIFT) | (r << SK_BGRA_R32_SHIFT) |
+                  (g << SK_BGRA_G32_SHIFT) | (b << SK_BGRA_B32_SHIFT);
+      }
+      break;
+      default:
+         // the remaining formats are not expected to be used in Chromium
+         LOG(WARNING) << "BRM: ShuffleSubchannelColorData(): Ignoring pixel format";
+         return;
+    }
+
+    // keep bisecting or reset current width/height as needed
+    if (x == 0) {
+       currentW = w;
+    } else {
+       currentW = x;
+    }
+    if (y == 0) {
+       currentH = h;
+    } else {
+       currentH = y;
+    }
+  }
+}
+
+#undef writable_addr
+#undef shuffleComponent
 
 }  // namespace blink

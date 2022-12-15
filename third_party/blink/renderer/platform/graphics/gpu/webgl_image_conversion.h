@@ -264,6 +264,14 @@ class PLATFORM_EXPORT WebGLImageConversion final {
 
   // End GraphicsContext3DImagePacking.cpp functions
 
+  static void PackPixels(const uint8_t* source_data,
+                         DataFormat source_data_format,
+                         unsigned pixels_per_row,
+                         uint8_t* destination_data);
+
+  static DataFormat GetWebGLDataFormat(GLenum destination_format,
+                                       GLenum destination_type);
+
  private:
   friend class WebGLImageConversionTest;
   // Helper for packImageData/extractImageData/extractTextureData, which
@@ -289,10 +297,7 @@ class PLATFORM_EXPORT WebGLImageConversion final {
                            DataFormat source_data_format,
                            unsigned pixels_per_row,
                            uint8_t* destination_data);
-  static void PackPixels(const uint8_t* source_data,
-                         DataFormat source_data_format,
-                         unsigned pixels_per_row,
-                         uint8_t* destination_data);
+ 
 };
 
 }  // namespace blink

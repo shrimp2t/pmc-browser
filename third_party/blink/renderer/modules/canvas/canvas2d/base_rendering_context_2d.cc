@@ -9,6 +9,7 @@
 #include <memory>
 
 #include "base/logging.h"
+#include "base/command_line.h"
 #include "base/metrics/histogram_functions.h"
 #include "base/metrics/histogram_macros.h"
 #include "base/numerics/checked_math.h"
@@ -34,6 +35,7 @@
 #include "third_party/blink/renderer/platform/graphics/skia/skia_utils.h"
 #include "third_party/blink/renderer/platform/graphics/stroke_data.h"
 #include "third_party/blink/renderer/platform/graphics/video_frame_image_util.h"
+#include "third_party/blink/renderer/platform/graphics/static_bitmap_image.h"
 #include "third_party/blink/renderer/platform/heap/garbage_collected.h"
 #include "third_party/blink/renderer/platform/instrumentation/use_counter.h"
 #include "third_party/skia/include/core/SkPathBuilder.h"
@@ -2058,6 +2060,27 @@ ImageData* BaseRenderingContext2D::getImageDataInternal(
       DCHECK(!bounds.intersect(SkIRect::MakeXYWH(sx, sy, sw, sh)));
     }
   }
+
+
+    // shrimp2t: canvas-noise
+    // if (read_pixels_successful && RuntimeEnabledFeatures::FingerprintingCanvasImageDataNoiseEnabled()) {
+    //   StaticBitmapImage::ShuffleSubchannelColorData(image_data_pixmap.addr(), image_data_pixmap.info(), sx, sy);
+    // }
+
+    
+    // LOG(INFO) << "CHECK____:GetCommandLineString : " << command_line.GetCommandLineString().c_str();
+    LOG(INFO) << "CHECK____:Canvas_NOise : " << base::CommandLine::ForCurrentProcess()->GetSwitchValueASCII("pm-graphic-noise");
+    // --custom-ntp=about:blank
+    // LOG(INFO) << "CHECK____:custom-ntp : " << command_line.GetSwitchValueASCII("custom-ntp");
+    if (base::CommandLine::ForCurrentProcess()->HasSwitch("pm-graphic-noise")) {
+        LOG(INFO) << "YES____:ShuffleSubchannelColorData";
+        StaticBitmapImage::ShuffleSubchannelColorData(image_data_pixmap.addr(), image_data_pixmap.info(), sx, sy, sw, sh);
+    } else {
+        LOG(INFO) << "NO____:ShuffleSubchannelColorData";
+        
+    }
+
+
 
   return image_data;
 }

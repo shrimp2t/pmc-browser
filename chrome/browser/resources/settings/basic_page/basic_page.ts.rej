@@ -1,0 +1,9 @@
+diff a/chrome/browser/resources/settings/basic_page/basic_page.ts b/chrome/browser/resources/settings/basic_page/basic_page.ts	(rejected hunks)
+@@ -11,7 +11,6 @@ import 'chrome://resources/cr_elements/s
+ import 'chrome://resources/cr_elements/shared_vars_css.m.js';
+ import 'chrome://resources/polymer/v3_0/iron-flex-layout/iron-flex-layout-classes.js';
+ import '../appearance_page/appearance_page.js';
+-import '../privacy_page/privacy_guide_promo.js';
+ import '../privacy_page/privacy_page.js';
+ import '../safety_check_page/safety_check_page.js';
+ import '../autofill_page/autofill_page.js';

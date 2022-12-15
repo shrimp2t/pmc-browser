@@ -38,7 +38,7 @@
               prefs="{{prefs}}">
           </settings-privacy-guide-promo>
         </settings-section>
-        <template is="dom-if" if="[[false]]"
+        <template is="dom-if" if="[[showPage_(pageVisibility.safetyCheck)]]"
             restamp>
           <settings-section page-title="$i18n{safetyCheckSectionTitle}"
               section="safetyCheck" nest-under-section="privacy"

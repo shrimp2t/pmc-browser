@@ -15,4 +15,7 @@ const char kFingerprintingCanvasMeasureTextNoise[] = "fingerprinting-canvas-meas
 // Enable fingerprinting deception for Canvas image data
 const char kFingerprintingCanvasImageDataNoise[] = "fingerprinting-canvas-image-data-noise";
 
+// Enable Canvas and web Gl noise
+const char kPmGraphicNoise[] = "pm-graphic-noise";
+
 }  // namespace switches

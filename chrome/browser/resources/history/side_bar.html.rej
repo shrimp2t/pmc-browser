@@ -1,0 +1,15 @@
+diff a/chrome/browser/resources/history/side_bar.html b/chrome/browser/resources/history/side_bar.html	(rejected hunks)
+@@ -120,13 +120,6 @@
+           $i18n{historyMenuItem}
+           <paper-ripple></paper-ripple>
+         </a>
+-        <a id="syncedTabs" role="menuitem" href="/syncedTabs"
+-            class="page-item cr-nav-menu-item"
+-            path="syncedTabs" on-click="onItemClick_">
+-          <iron-icon icon="cr:phonelink"></iron-icon>
+-          $i18n{openTabsMenuItem}
+-          <paper-ripple></paper-ripple>
+-        </a>
+         <!-- tabindex is needed below because <a> without href attribute is not
+              focusable in sequential keyboard navigation by default. -->
+         <a role="menuitem" id="toggle-history-clusters"

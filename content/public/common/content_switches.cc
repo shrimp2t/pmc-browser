@@ -1083,4 +1083,7 @@ const char kIpcFuzzerTestcase[] = "ipc-fuzzer-testcase";
 
 // Don't dump stuff here, follow the same order as the header.
 
+// Enable Canvas and web Gl noise
+const char kPmGraphicNoise[] = "pm-graphic-noise";
+
 }  // namespace switches

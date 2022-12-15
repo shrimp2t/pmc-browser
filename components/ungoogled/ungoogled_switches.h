@@ -15,6 +15,9 @@ COMPONENT_EXPORT(UNGOOGLED) extern const char kFingerprintingClientRectsNoise[];
 COMPONENT_EXPORT(UNGOOGLED) extern const char kFingerprintingCanvasMeasureTextNoise[];
 COMPONENT_EXPORT(UNGOOGLED) extern const char kFingerprintingCanvasImageDataNoise[];
 
+COMPONENT_EXPORT(UNGOOGLED) extern const char kPmGraphicNoise[];
+
+
 }
 
 #endif  // THIRD_PARTY_UNGOOGLED_FINGERPRINTING_SWITCHES_H_
